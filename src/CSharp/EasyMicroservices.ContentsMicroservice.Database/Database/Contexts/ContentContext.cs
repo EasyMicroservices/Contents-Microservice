@@ -13,6 +13,7 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
         }
 
         public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<ContentEntity> Contents { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -30,7 +31,18 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
             {
                 model.HasKey(x => x.Id);
             });
+            modelBuilder.Entity<ContentEntity>(model =>
+            {
+                model.HasKey(x => x.Id);
 
+                model.HasOne(x => x.Category)
+                .WithMany(x => x.Content)
+                .HasForeignKey(x => x.CategoryId);
+
+                model.HasOne(x => x.Language)
+                .WithMany(x => x.Content)
+                .HasForeignKey(x => x.LanguageId);
+            });
         }
     }
 }

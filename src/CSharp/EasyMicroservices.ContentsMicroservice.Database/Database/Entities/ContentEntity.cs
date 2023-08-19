@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace EasyMicroservices.ContentsMicroservice.Database.Entities
 {
-    public class CategoryEntity : CategorySchema, IIdSchema<long>
+    public class ContentEntity : ContentSchema, IIdSchema<long>
     {
         public long Id { get; set; }
-        public ICollection<ContentEntity> Content { get;  set; }
-
+        public long LanguageId { get; set; }
+        public long CategoryId { get; set; }
+        public CategoryEntity Category { get; set; }
     }
 }
