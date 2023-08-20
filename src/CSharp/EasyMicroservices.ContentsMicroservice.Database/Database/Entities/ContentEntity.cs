@@ -12,6 +12,7 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Entities
     {
         public long Id { get; set; }
         public long LanguageId { get; set; }
+        public LanguageEntity Language { get; set; }
         public long CategoryId { get; set; }
         public CategoryEntity Category { get; set; }
     }

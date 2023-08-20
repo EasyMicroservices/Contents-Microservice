@@ -15,6 +15,9 @@ using EasyMicroservices.ContentsMicroservice.Interfaces;
 using EasyMicroservices.ContentsMicroservice;
 using EasyMicroservices.ContentsMicroservice.Contracts.Common;
 using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
+using EasyMicroservices.ContentsMicroservice;
+
+
 
 namespace EasyMicroservices.ContentsMicroservice.WebApi
 {
@@ -48,7 +51,9 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             string webRootPath = @Directory.GetCurrentDirectory();
 
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, AddContentContract, UpdateContentContract, ContentContract>());
+            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>());
+            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
+            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
             builder.Services.AddScoped<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
    
             builder.Services.AddScoped<IDependencyManager>(service => new DependencyManager());

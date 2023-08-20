@@ -1,6 +1,6 @@
-﻿using EasyMicroservices.ContentsMicroservice.Interfaces;
-using EasyMicroservices.ContentsMicroservice;
-using EasyMicroservices.Configuration.Interfaces;
+﻿using EasyMicroservices.Configuration.Interfaces;
+using EasyMicroservices.ContentsMicroservice.Database.Contexts;
+using EasyMicroservices.ContentsMicroservice.Interfaces;
 using EasyMicroservices.Cores.Database.Interfaces;
 using EasyMicroservices.Cores.Database.Logics;
 using EasyMicroservices.Cores.Database.Managers;
@@ -10,8 +10,6 @@ using EasyMicroservices.Database.Interfaces;
 using EasyMicroservices.Mapper.CompileTimeMapper.Interfaces;
 using EasyMicroservices.Mapper.CompileTimeMapper.Providers;
 using EasyMicroservices.Mapper.Interfaces;
-using EasyMicroservices.ContentsMicroservice.Database.Contexts;
-using EasyMicroservices.ContentsMicroservice.Interfaces;
 using System;
 using System.Linq;
 
