@@ -37,11 +37,11 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
                 model.HasKey(x => x.Id);
 
                 model.HasOne(x => x.Category)
-                .WithMany(x => x.Content)
+                .WithMany(x => x.Contents)
                 .HasForeignKey(x => x.CategoryId);
 
                 model.HasOne(x => x.Language)
-                .WithMany(x => x.Content)
+                .WithMany(x => x.Contents)
                 .HasForeignKey(x => x.LanguageId);
             });
             modelBuilder.Entity<LanguageEntity>(model =>
