@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WhiteLables.GeneratedServices;
 using EasyMicroservices.ContentsMicroservice;
-using EasyMicroservices.ContentsMicroservice;
 
 namespace EasyMicroservices.ContentsMicroservice
 {
