@@ -55,7 +55,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
             builder.Services.AddScoped<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
-
+   
             builder.Services.AddScoped<IDependencyManager>(service => new DependencyManager());
             builder.Services.AddScoped(service => new WhiteLabelManager(service, service.GetService<IDependencyManager>()));
             builder.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IDatabaseBuilder>()));
@@ -92,7 +92,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             await startUp.Run(new DependencyManager());
             app.Run();
         }
-
+        
         static void CreateDatabase()
         {
             using (var context = new ContentContext(new DatabaseBuilder()))
