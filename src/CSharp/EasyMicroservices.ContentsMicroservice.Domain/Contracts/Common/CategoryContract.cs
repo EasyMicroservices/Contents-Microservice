@@ -16,5 +16,6 @@ namespace EasyMicroservices.ContentsMicroservice.Contracts.Common
         public DateTime? ModificationDateTime { get; set; }
         public DateTime? DeletedDateTime { get; set; }
         public bool IsDeleted { get; set; }
+        public List<ContentContract> Contents { get; set; }
     }
 }
