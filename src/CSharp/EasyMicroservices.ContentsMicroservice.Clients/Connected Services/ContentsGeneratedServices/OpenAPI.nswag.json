@@ -5,104 +5,6 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Category/GetById": {
-      "post": {
-        "tags": [
-          "Category"
-        ],
-        "operationId": "GetById",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Category/GetByUniqueIdentity": {
-      "post": {
-        "tags": [
-          "Category"
-        ],
-        "operationId": "GetByUniqueIdentity",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CategoryContractMessageContract"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/Category/Add": {
       "post": {
         "tags": [
@@ -299,6 +201,153 @@
         }
       }
     },
+    "/api/Category/GetById": {
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "GetById",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Category/GetByUniqueIdentity": {
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "GetByUniqueIdentity",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Category/Filter": {
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "Filter",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractListMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractListMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractListMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Category/GetAll": {
       "get": {
         "tags": [
@@ -476,76 +525,27 @@
         }
       }
     },
-    "/api/Content/GetById": {
+    "/api/Content/GetByLanguage": {
       "post": {
         "tags": [
           "Content"
         ],
-        "operationId": "GetById2",
+        "operationId": "GetByLanguage",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+                "$ref": "#/components/schemas/GetByLanguageRequestContract"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+                "$ref": "#/components/schemas/GetByLanguageRequestContract"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ContentContractMessageContract"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ContentContractMessageContract"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ContentContractMessageContract"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Content/GetByUniqueIdentity": {
-      "post": {
-        "tags": [
-          "Content"
-        ],
-        "operationId": "GetByUniqueIdentity2",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+                "$ref": "#/components/schemas/GetByLanguageRequestContract"
               }
             }
           }
@@ -672,6 +672,153 @@
         }
       }
     },
+    "/api/Content/GetById": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "GetById2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Content/GetByUniqueIdentity": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "GetByUniqueIdentity2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Content/Filter": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "Filter2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Content/GetAll": {
       "get": {
         "tags": [
@@ -751,27 +898,27 @@
         }
       }
     },
-    "/api/Language/GetById": {
+    "/api/Language/HasLanguage": {
       "post": {
         "tags": [
           "Language"
         ],
-        "operationId": "GetById3",
+        "operationId": "HasLanguage",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+                "$ref": "#/components/schemas/HasLanguageRequestContract"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+                "$ref": "#/components/schemas/HasLanguageRequestContract"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+                "$ref": "#/components/schemas/HasLanguageRequestContract"
               }
             }
           }
@@ -782,66 +929,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                  "$ref": "#/components/schemas/MessageContract"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                  "$ref": "#/components/schemas/MessageContract"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Language/GetByUniqueIdentity": {
-      "post": {
-        "tags": [
-          "Language"
-        ],
-        "operationId": "GetByUniqueIdentity3",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                  "$ref": "#/components/schemas/MessageContract"
                 }
               }
             }
@@ -1045,6 +1143,153 @@
         }
       }
     },
+    "/api/Language/GetById": {
+      "post": {
+        "tags": [
+          "Language"
+        ],
+        "operationId": "GetById3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Int64GetIdRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Language/GetByUniqueIdentity": {
+      "post": {
+        "tags": [
+          "Language"
+        ],
+        "operationId": "GetByUniqueIdentity3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUniqueIdentityRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Language/Filter": {
+      "post": {
+        "tags": [
+          "Language"
+        ],
+        "operationId": "Filter3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FilterRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractListMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractListMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageContractListMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Language/GetAll": {
       "get": {
         "tags": [
@@ -1161,11 +1406,19 @@
           },
           "isDeleted": {
             "type": "boolean"
+          },
+          "contents": {
+            "title": "List<ContentContract>",
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ContentContract"
+            }
           }
         }
       },
       "CategoryContractListMessageContract": {
-        "title": "MessageContract<List`1>",
+        "title": "ListMessageContract<CategoryContract>",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1182,6 +1435,10 @@
             "items": {
               "$ref": "#/components/schemas/CategoryContract"
             }
+          },
+          "hasItems": {
+            "type": "boolean",
+            "readOnly": true
           }
         }
       },
@@ -1243,11 +1500,14 @@
           },
           "isDeleted": {
             "type": "boolean"
+          },
+          "language": {
+            "$ref": "#/components/schemas/LanguageContract"
           }
         }
       },
       "ContentContractListMessageContract": {
-        "title": "MessageContract<List`1>",
+        "title": "ListMessageContract<ContentContract>",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1264,6 +1524,10 @@
             "items": {
               "$ref": "#/components/schemas/ContentContract"
             }
+          },
+          "hasItems": {
+            "type": "boolean",
+            "readOnly": true
           }
         }
       },
@@ -1408,11 +1672,105 @@
           16
         ]
       },
+      "FilterRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isDeleted": {
+            "title": "Nullable<Boolean>",
+            "type": "boolean",
+            "nullable": true
+          },
+          "fromDeletedDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "toDeletedDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fromCreationDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "toCreationDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fromModificationDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "toModificationDateTime": {
+            "title": "Nullable<DateTime>",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "uniqueIdentity": {
+            "type": "string",
+            "nullable": true
+          },
+          "index": {
+            "title": "Nullable<Int64>",
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "length": {
+            "title": "Nullable<Int64>",
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "sortColumnName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDescending": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GetByLanguageRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "key": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "GetUniqueIdentityRequestContract": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "uniqueIdentity": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "HasLanguageRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "language": {
             "type": "string",
             "nullable": true
           }
@@ -1509,7 +1867,7 @@
         }
       },
       "LanguageContractListMessageContract": {
-        "title": "MessageContract<List`1>",
+        "title": "ListMessageContract<LanguageContract>",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1526,6 +1884,10 @@
             "items": {
               "$ref": "#/components/schemas/LanguageContract"
             }
+          },
+          "hasItems": {
+            "type": "boolean",
+            "readOnly": true
           }
         }
       },
