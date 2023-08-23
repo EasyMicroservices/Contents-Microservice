@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test-Layer", "Test-Layer", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMicroservices.ContentsMicroservice.Clients", "EasyMicroservices.ContentsMicroservice.Clients\EasyMicroservices.ContentsMicroservice.Clients.csproj", "{EBDC4665-F64A-4F50-B939-3ACCAFB72A3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMicroservices.ContentsMicroservice.Clients.Tests", "EasyMicroservices.ContentsMicroservice.Tests\EasyMicroservices.ContentsMicroservice.Clients.Tests.csproj", "{3969FAB0-9A48-4516-97DD-C1882DDF1E96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMicroservices.ContentsMicroservice.Clients.Tests", "EasyMicroservices.ContentsMicroservice.Clients.Tests\EasyMicroservices.ContentsMicroservice.Clients.Tests.csproj", "{3969FAB0-9A48-4516-97DD-C1882DDF1E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
