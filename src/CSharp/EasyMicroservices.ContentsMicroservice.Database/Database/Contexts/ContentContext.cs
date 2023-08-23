@@ -47,6 +47,7 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
             modelBuilder.Entity<LanguageEntity>(model =>
             {
                 model.HasKey(x => x.Id);
+                model.HasIndex(x => x.Name).IsUnique();
             });
         }
     }
