@@ -41,6 +41,7 @@ Content-Length: 0
                 Semaphore.Release();
             }
         }
+
         [Fact]
         public async Task GetAllTestTest()
         {
