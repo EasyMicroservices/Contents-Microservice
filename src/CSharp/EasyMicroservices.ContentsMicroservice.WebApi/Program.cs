@@ -1,21 +1,15 @@
+using EasyMicroservices.ContentsMicroservice.Contracts.Common;
+using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
 using EasyMicroservices.ContentsMicroservice.Database;
 using EasyMicroservices.ContentsMicroservice.Database.Contexts;
+using EasyMicroservices.ContentsMicroservice.Database.Entities;
+using EasyMicroservices.ContentsMicroservice.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using EasyMicroservices.ContentsMicroservice.Database.Entities;
-using EasyMicroservices.ContentsMicroservice.Contracts;
-using EasyMicroservices.ContentsMicroservice.Interfaces;
-using EasyMicroservices.ContentsMicroservice.Database;
-using EasyMicroservices.ContentsMicroservice.Interfaces;
-using EasyMicroservices.ContentsMicroservice;
-using EasyMicroservices.ContentsMicroservice.Contracts.Common;
-using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
-using EasyMicroservices.ContentsMicroservice;
 
 
 
@@ -55,7 +49,6 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
             builder.Services.AddScoped<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
-
             builder.Services.AddScoped<IDependencyManager>(service => new DependencyManager());
             builder.Services.AddScoped(service => new WhiteLabelManager(service, service.GetService<IDependencyManager>()));
             builder.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IDatabaseBuilder>()));
