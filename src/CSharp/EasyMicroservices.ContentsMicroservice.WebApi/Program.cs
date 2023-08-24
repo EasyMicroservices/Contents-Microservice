@@ -55,7 +55,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
             builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
             builder.Services.AddScoped<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
-   
+
             builder.Services.AddScoped<IDependencyManager>(service => new DependencyManager());
             builder.Services.AddScoped(service => new WhiteLabelManager(service, service.GetService<IDependencyManager>()));
             builder.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IDatabaseBuilder>()));
@@ -81,8 +81,8 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             using (var scope = app.Services.CreateScope())
             {
                 using var context = scope.ServiceProvider.GetService<ContentContext>();
-                //await context.Database.EnsureCreatedAsync();
-                //await context.Database.MigrateAsync();
+                await context.Database.EnsureCreatedAsync();
+                await context.Database.MigrateAsync();
                 await context.DisposeAsync();
                 var service = scope.ServiceProvider.GetService<WhiteLabelManager>();
                 await service.Initialize("Content", config.GetValue<string>("RootAddresses:WhiteLabel"), typeof(ContentContext));
@@ -92,7 +92,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             await startUp.Run(new DependencyManager());
             app.Run();
         }
-        
+
         static void CreateDatabase()
         {
             using (var context = new ContentContext(new DatabaseBuilder()))
