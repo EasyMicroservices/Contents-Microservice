@@ -5,6 +5,8 @@ using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
 using EasyMicroservices.ContentsMicroservice.Database.Entities;
 using EasyMicroservices.ServiceContracts;
 using EasyMicroservices.Cores.Contracts.Requests;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
 {
@@ -14,7 +16,8 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         private readonly IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> _languagelogic;
         private readonly IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> _categorylogic;
 
-        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic , IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic , IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
+
+        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic, IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic, IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
         {
             _contractlogic = contractLogic;
             _languagelogic = languagelogic;
@@ -36,6 +39,21 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                 return await base.Update(request, cancellationToken);
             return (EasyMicroservices.ServiceContracts.FailedReasonType.Empty, "LaguageId or Categoryid is incorrect");
 
+        }
+
+        [HttpPost]
+        public async Task<MessageContract<ContentContract>> GetByLanguage(GetByLanguageRequestContract request)
+        {
+            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
+            if (!getCategoryResult)
+                return getCategoryResult.ToContract<ContentContract>();
+            var contentResult = getCategoryResult.Result.Contents.FirstOrDefault(x => x.Language.Name.Equals(request.Language, StringComparison.OrdinalIgnoreCase));
+            if (contentResult == null)
+                contentResult = getCategoryResult.Result.Contents.FirstOrDefault();
+            if (contentResult == null)
+                return (FailedReasonType.NotFound, $"Content {request.Key} by language {request.Language} not found!");
+
+            return contentResult;
         }
     }
 }
