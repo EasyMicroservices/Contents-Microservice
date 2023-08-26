@@ -16,7 +16,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         private readonly IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> _languagelogic;
         private readonly IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> _categorylogic;
 
-        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic , IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic , IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
+        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic, IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic, IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
         {
             _contractlogic = contractLogic;
             _languagelogic = languagelogic;
@@ -67,14 +67,15 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
 
             if (!notFoundLanguages.Any())
             {
-                var addCategoryResult = await _categorylogic.Add(new CreateCategoryRequestContract { 
+                var addCategoryResult = await _categorylogic.Add(new CreateCategoryRequestContract
+                {
                     Key = request.Key,
                 });
 
                 if (!addCategoryResult.IsSuccess)
                     return addCategoryResult.ToContract<CategoryContract>();
 
-                foreach(var item in request.LanguageData)
+                foreach (var item in request.LanguageData)
                 {
                     var languageId = languages.Result.FirstOrDefault(o => o.Name == item.Language)?.Id;
                     if (!languageId.HasValue)
