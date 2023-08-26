@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BusinessLogic-Layer", "Busi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAccess-Layer", "DataAccess-Layer", "{DD5CE7AE-185C-4AB5-A7AD-9CCB6051E804}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test-Layer", "Test-Layer", "{2A1A75C2-9A91-4588-9ADD-046CB14463CA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMicroservices.ContentsMicroservice.ConsoleApp", "EasyMicroservices.ContentsMicroservice.ConsoleApp\EasyMicroservices.ContentsMicroservice.ConsoleApp.csproj", "{A4A1E51B-754C-43F1-9F5C-524084465CB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMicroservices.ContentsMicroservice.WebApi", "EasyMicroservices.ContentsMicroservice.WebApi\EasyMicroservices.ContentsMicroservice.WebApi.csproj", "{96989D74-1B60-4E56-B4AA-207040490549}"
