@@ -16,7 +16,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         private readonly IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> _languagelogic;
         private readonly IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> _categorylogic;
 
-        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic, IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic, IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
+        public ContentController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> categorylogic , IContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract, long> languagelogic , IContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long> contractLogic) : base(contractLogic)
         {
             _contractlogic = contractLogic;
             _languagelogic = languagelogic;
@@ -53,6 +53,47 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                 return (FailedReasonType.NotFound, $"Content {request.Key} by language {request.Language} not found!");
 
             return contentResult;
+        }
+
+        [HttpPost]
+        public async Task<MessageContract<CategoryContract>> AddContentWithKey(AddContentWithKeyRequestContract request)
+        {
+            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key);
+            if (getCategoryResult.IsSuccess)
+                return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category is already exists.");
+
+            var languages = await _languagelogic.GetAll();
+            var notFoundLanguages = request.LanguageData.Select(x => x.Language).Except(languages.Result.Select(o => o.Name));
+
+            if (!notFoundLanguages.Any())
+            {
+                var addCategoryResult = await _categorylogic.Add(new CreateCategoryRequestContract { 
+                    Key = request.Key,
+                });
+
+                if (!addCategoryResult.IsSuccess)
+                    return addCategoryResult.ToContract<CategoryContract>();
+
+                foreach(var item in request.LanguageData)
+                {
+                    var languageId = languages.Result.FirstOrDefault(o => o.Name == item.Language)?.Id;
+                    if (!languageId.HasValue)
+                        return (FailedReasonType.Unknown, "An error has occured!");
+
+
+                    var addContentResult = _contractlogic.Add(new CreateContentRequestContract
+                    {
+                        CategoryId = addCategoryResult.Result,
+                        LanguageId = languageId.Value,
+                        Data = item.Data
+                    });
+                }
+
+                return addCategoryResult.ToContract<CategoryContract>();
+            }
+
+            return (FailedReasonType.Incorrect, $"This languages are not registered in the content server: {string.Join(", ", notFoundLanguages)}");
+
         }
     }
 }
