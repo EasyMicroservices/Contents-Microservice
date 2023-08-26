@@ -28,7 +28,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await _categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Add(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Empty, "LaguageId or Categoryid is incorrect");
+            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
         }
         public override async Task<MessageContract<ContentContract>> Update(UpdateContentRequestContract request, CancellationToken cancellationToken = default)
         {
@@ -36,7 +36,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await _categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Update(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Empty, "LaguageId or Categoryid is incorrect");
+            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
 
         }
 
@@ -93,7 +93,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             }
 
             return (FailedReasonType.Incorrect, $"This languages are not registered in the content server: {string.Join(", ", notFoundLanguages)}");
-
         }
+
     }
 }
