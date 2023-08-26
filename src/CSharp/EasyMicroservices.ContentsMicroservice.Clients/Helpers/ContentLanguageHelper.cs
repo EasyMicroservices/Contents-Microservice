@@ -53,13 +53,13 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             {
                 if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
                 {
-                    var cotentResult = await _contentClient.GetByLanguageAsync(new GetByLanguageRequestContract()
+                    var contentResult = await _contentClient.GetByLanguageAsync(new GetByLanguageRequestContract()
                     {
                         Key = GetUniqueIdentity(contract) + "-" + property.Name,
                         Language = language
                     });
-                    if (cotentResult.IsSuccess)
-                        property.SetValue(contract, cotentResult.Result.Data);
+                    if (contentResult.IsSuccess)
+                        property.SetValue(contract, contentResult.Result.Data);
                 }
                 else if (IsClass(property.PropertyType) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                 {
