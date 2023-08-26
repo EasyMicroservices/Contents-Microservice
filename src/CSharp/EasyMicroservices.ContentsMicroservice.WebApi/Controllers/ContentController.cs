@@ -103,7 +103,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
             if (getCategoryResult.IsSuccess)
             {
-                if(getCategoryResult.Result.Contents.Any())
+                if (getCategoryResult.Result.Contents.Any())
                 {
                     var contents = getCategoryResult.Result.Contents;
                     foreach (var content in contents)
@@ -118,8 +118,8 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                                 UniqueIdentity = content.UniqueIdentity,
 
                                 Data = request.LanguageData.FirstOrDefault(o => o.Language == content.Language.Name).Data
-                            }); 
-                            
+                            });
+
                             if (!response.IsSuccess)
                                 return (FailedReasonType.Unknown, "An error has occured");
 
