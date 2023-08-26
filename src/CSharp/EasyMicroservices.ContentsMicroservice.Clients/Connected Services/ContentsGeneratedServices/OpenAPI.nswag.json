@@ -574,6 +574,55 @@
         }
       }
     },
+    "/api/Content/AddContentWithKey": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "AddContentWithKey",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddContentWithKeyRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddContentWithKeyRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddContentWithKeyRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Content/HardDeleteById": {
       "delete": {
         "tags": [
@@ -1372,6 +1421,24 @@
   },
   "components": {
     "schemas": {
+      "AddContentWithKeyRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
+          },
+          "languageData": {
+            "title": "List<LanguageDataContract>",
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/LanguageDataContract"
+            }
+          }
+        }
+      },
       "CategoryContract": {
         "type": "object",
         "additionalProperties": false,
@@ -1904,6 +1971,20 @@
           },
           "result": {
             "$ref": "#/components/schemas/LanguageContract"
+          }
+        }
+      },
+      "LanguageDataContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
