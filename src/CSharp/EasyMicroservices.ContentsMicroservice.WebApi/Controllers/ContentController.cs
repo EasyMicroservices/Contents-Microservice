@@ -28,7 +28,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await _categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Add(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "LanguageId or Categoryid is incorrect");
+            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
         }
         public override async Task<MessageContract<ContentContract>> Update(UpdateContentRequestContract request, CancellationToken cancellationToken = default)
         {
@@ -36,7 +36,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await _categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Update(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "LanguageId or Categoryid is incorrect");
+            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
 
         }
 
@@ -60,7 +60,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         {
             var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key);
             if (getCategoryResult.IsSuccess)
-                return getCategoryResult;
+                return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category is already exists.");
 
             var languages = await _languagelogic.GetAll();
             var notFoundLanguages = request.LanguageData.Select(x => x.Language).Except(languages.Result.Select(o => o.Name));
@@ -99,7 +99,43 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             }
 
             return (FailedReasonType.Incorrect, $"This languages are not registered in the content server: {string.Join(", ", notFoundLanguages)}");
+        }
 
+
+        [HttpPost]
+        public async Task<MessageContract> UpdateContentWithKey(AddContentWithKeyRequestContract request)
+        {
+            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
+            if (getCategoryResult.IsSuccess)
+            {
+                if (getCategoryResult.Result.Contents.Any())
+                {
+                    var contents = getCategoryResult.Result.Contents;
+                    foreach (var content in contents)
+                    {
+                        if (request.LanguageData.Any(o => o.Language == content.Language.Name))
+                        {
+                            var response = await _contractlogic.Update(new UpdateContentRequestContract
+                            {
+                                Id = content.Id,
+                                CategoryId = content.CategoryId,
+                                LanguageId = content.LanguageId,
+                                UniqueIdentity = content.UniqueIdentity,
+
+                                Data = request.LanguageData.FirstOrDefault(o => o.Language == content.Language.Name).Data
+                            });
+
+                            if (!response.IsSuccess)
+                                return (FailedReasonType.Unknown, "An error has occured");
+
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category doesn't exists");
         }
     }
 }
