@@ -82,12 +82,17 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                         return (FailedReasonType.Unknown, "An error has occured!");
 
 
-                    var addContentResult = _contractlogic.Add(new CreateContentRequestContract
+                    var addContentResult = await _contractlogic.Add(new CreateContentRequestContract
                     {
                         CategoryId = addCategoryResult.Result,
                         LanguageId = languageId.Value,
                         Data = item.Data
                     });
+
+                    var addedContentResult = await _categorylogic.GetBy(o => o.Id == addContentResult.Result);
+
+                    if (addedContentResult.IsSuccess)
+                        return addedContentResult.Result;
                 }
 
                 return addCategoryResult.ToContract<CategoryContract>();
