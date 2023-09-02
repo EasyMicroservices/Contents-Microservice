@@ -5,6 +5,55 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Category/IsKeyExists": {
+      "post": {
+        "tags": [
+          "Category"
+        ],
+        "operationId": "IsKeyExists",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IsKeyExistRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IsKeyExistRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/IsKeyExistRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Category/Add": {
       "post": {
         "tags": [
@@ -1942,6 +1991,16 @@
           },
           "isDelete": {
             "type": "boolean"
+          }
+        }
+      },
+      "IsKeyExistRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

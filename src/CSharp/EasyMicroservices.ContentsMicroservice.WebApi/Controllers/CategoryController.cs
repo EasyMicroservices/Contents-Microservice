@@ -3,6 +3,8 @@ using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
 using EasyMicroservices.ContentsMicroservice.Database.Entities;
 using EasyMicroservices.Cores.AspCoreApi;
 using EasyMicroservices.Cores.Database.Interfaces;
+using EasyMicroservices.ServiceContracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
 {
@@ -13,6 +15,15 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         public CategoryController(IContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract, long> contractLogic) : base(contractLogic)
         {
             _contractlogic = contractLogic;
+        }
+
+
+        [HttpPost]
+        public async Task<MessageContract> IsKeyExists(IsKeyExistRequestContract request)
+        {
+            var isKeyExists = await _contractlogic.GetBy(o => o.Key == request.Key);
+
+            return isKeyExists;
         }
     }
 }

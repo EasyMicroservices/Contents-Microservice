@@ -18,6 +18,11 @@
     <ProjectReference Include="..\EasyMicroservices.ContentsMicroservice.StartUp\EasyMicroservices.ContentsMicroservice.StartUp.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Content Update="appsettings.json" CopyToPublishDirectory="Never" />
+		<Content Update="appsettings.*.json" CopyToPublishDirectory="Never" />
+		<Content Update="appsettings.$(MSBuildThisFileName).json" CopyToPublishDirectory="PreserveNewest" />
+	</ItemGroup>
 
 
 </Project>

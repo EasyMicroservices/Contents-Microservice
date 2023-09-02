@@ -1,6 +1,7 @@
 ﻿using EasyMicroservices.ContentsMicroservice.Database.Entities;
 using EasyMicroservices.Cores.Relational.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
 {
@@ -44,8 +45,24 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
                 .WithMany(x => x.Contents)
                 .HasForeignKey(x => x.LanguageId);
             });
+
             modelBuilder.Entity<LanguageEntity>(model =>
             {
+                model.HasData(
+                    new LanguageEntity()
+                    {
+                        Id = 1,
+                        Name = "fa-IR",
+                        CreationDateTime = DateTime.Now
+                    },
+                    new LanguageEntity()
+                    {
+                        Id = 2,
+                        Name = "en-US",
+                        CreationDateTime = DateTime.Now
+                    }
+                );
+
                 model.HasKey(x => x.Id);
                 model.HasIndex(x => x.Name).IsUnique();
             });
