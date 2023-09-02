@@ -81,21 +81,20 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                     if (!languageId.HasValue)
                         return (FailedReasonType.Unknown, "An error has occured!");
 
-
                     var addContentResult = await _contractlogic.Add(new CreateContentRequestContract
                     {
                         CategoryId = addCategoryResult.Result,
                         LanguageId = languageId.Value,
                         Data = item.Data
                     });
-
-                    var addedContentResult = await _categorylogic.GetBy(o => o.Id == addContentResult.Result);
-
-                    if (addedContentResult.IsSuccess)
-                        return addedContentResult.Result;
                 }
 
-                return addCategoryResult.ToContract<CategoryContract>();
+                var addedCategoryResult = await _categorylogic.GetById(new GetIdRequestContract<long>
+                {
+                    Id = addCategoryResult.Result
+                });
+
+                return addedCategoryResult.Result;
             }
 
             return (FailedReasonType.Incorrect, $"This languages are not registered in the content server: {string.Join(", ", notFoundLanguages)}");
@@ -137,5 +136,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
 
             return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category doesn't exists");
         }
+
+
     }
 }
