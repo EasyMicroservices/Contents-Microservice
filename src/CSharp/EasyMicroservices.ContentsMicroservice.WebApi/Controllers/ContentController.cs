@@ -100,43 +100,59 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             return (FailedReasonType.Incorrect, $"This languages are not registered in the content server: {string.Join(", ", notFoundLanguages)}");
         }
 
-
         [HttpPost]
         public async Task<MessageContract> UpdateContentWithKey(AddContentWithKeyRequestContract request)
         {
             var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
             if (getCategoryResult.IsSuccess)
             {
-                if (getCategoryResult.Result.Contents.Any())
+                var contents = getCategoryResult.Result.Contents;
+                foreach (var content in contents)
                 {
-                    var contents = getCategoryResult.Result.Contents;
-                    foreach (var content in contents)
+                    if (request.LanguageData.Any(o => o.Language == content.Language.Name))
                     {
-                        if (request.LanguageData.Any(o => o.Language == content.Language.Name))
+                        var response = await _contractlogic.Update(new UpdateContentRequestContract
                         {
-                            var response = await _contractlogic.Update(new UpdateContentRequestContract
-                            {
-                                Id = content.Id,
-                                CategoryId = content.CategoryId,
-                                LanguageId = content.LanguageId,
-                                UniqueIdentity = content.UniqueIdentity,
+                            Id = content.Id,
+                            CategoryId = content.CategoryId,
+                            LanguageId = content.LanguageId,
+                            UniqueIdentity = content.UniqueIdentity,
 
-                                Data = request.LanguageData.FirstOrDefault(o => o.Language == content.Language.Name).Data
-                            });
+                            Data = request.LanguageData.FirstOrDefault(o => o.Language == content.Language.Name).Data
+                        });
 
-                            if (!response.IsSuccess)
-                                return (FailedReasonType.Unknown, "An error has occured");
-
-                        }
+                        if (!response.IsSuccess)
+                            return (FailedReasonType.Unknown, "An error has occured");
                     }
-
-                    return true;
                 }
+
+                foreach (var languageData in request.LanguageData)
+                {
+                    if (!contents.Any(o => o.Language.Name == languageData.Language))
+                    {
+                        var language = await _languagelogic.GetBy(o => o.Name == languageData.Language);
+
+                        if (!language)
+                            continue;
+
+                        var response = await _contractlogic.Add(new CreateContentRequestContract
+                        {
+                            CategoryId = getCategoryResult.Result.Id,
+                            LanguageId = language.Result.Id,
+                            UniqueIdentity = language.Result.UniqueIdentity,
+
+                            Data = languageData.Data
+                        });
+
+                        if (!response.IsSuccess)
+                            return (FailedReasonType.Unknown, "An error has occured");
+                    }
+                }
+
+                return true;
             }
 
             return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category doesn't exists");
         }
-
-
     }
 }
