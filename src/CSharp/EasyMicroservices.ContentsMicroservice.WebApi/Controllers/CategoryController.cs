@@ -19,7 +19,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<MessageContract> IsKeyExists(IsKeyExistRequestContract request)
+        public async Task<MessageContract<CategoryContract>> HasKey(IsKeyExistRequestContract request)
         {
             var isKeyExists = await _contractlogic.GetBy(o => o.Key == request.Key);
 

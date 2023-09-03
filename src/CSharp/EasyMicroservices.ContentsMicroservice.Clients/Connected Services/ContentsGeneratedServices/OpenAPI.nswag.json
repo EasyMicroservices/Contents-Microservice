@@ -5,12 +5,12 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Category/IsKeyExists": {
+    "/api/Category/HasKey": {
       "post": {
         "tags": [
           "Category"
         ],
-        "operationId": "IsKeyExists",
+        "operationId": "HasKey",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36,17 +36,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/MessageContract"
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MessageContract"
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MessageContract"
+                  "$ref": "#/components/schemas/CategoryContractMessageContract"
                 }
               }
             }
