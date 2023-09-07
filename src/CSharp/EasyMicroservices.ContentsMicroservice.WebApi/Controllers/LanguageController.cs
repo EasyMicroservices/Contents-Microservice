@@ -22,5 +22,6 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         {
             return await _contractlogic.GetBy(x => x.Name == hasLanguageRequest.Language);
         }
+
     }
 }

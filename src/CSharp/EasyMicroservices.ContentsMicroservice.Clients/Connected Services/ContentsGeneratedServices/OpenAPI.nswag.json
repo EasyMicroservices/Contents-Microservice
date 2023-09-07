@@ -623,6 +623,55 @@
         }
       }
     },
+    "/api/Content/GetAllByKey": {
+      "post": {
+        "tags": [
+          "Content"
+        ],
+        "operationId": "GetAllByKey",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllByKeyRequestContract"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllByKeyRequestContract"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllByKeyRequestContract"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentContractListMessageContract"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Content/AddContentWithKey": {
       "post": {
         "tags": [
@@ -1904,6 +1953,16 @@
           },
           "isDescending": {
             "type": "boolean"
+          }
+        }
+      },
+      "GetAllByKeyRequestContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

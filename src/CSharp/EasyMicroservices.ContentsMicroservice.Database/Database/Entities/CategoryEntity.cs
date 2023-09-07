@@ -12,6 +12,5 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Entities
     {
         public long Id { get; set; }
         public ICollection<ContentEntity> Contents { get; set; }
-
     }
 }

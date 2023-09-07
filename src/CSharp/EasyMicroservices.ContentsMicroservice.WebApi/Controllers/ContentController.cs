@@ -55,6 +55,17 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             return contentResult;
         }
 
+
+        [HttpPost]
+        public async Task<ListMessageContract<ContentContract>> GetAllByKey(GetAllByKeyRequestContract request)
+        {
+            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents));
+            if (!getCategoryResult)
+                return getCategoryResult.ToListContract<ContentContract>();
+
+            return getCategoryResult.Result.Contents;
+        }
+
         [HttpPost]
         public async Task<MessageContract<CategoryContract>> AddContentWithKey(AddContentWithKeyRequestContract request)
         {
@@ -154,5 +165,6 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
 
             return (FailedReasonType.Incorrect, $"{getCategoryResult.Result.Key} category doesn't exists");
         }
+
     }
 }
