@@ -59,7 +59,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         [HttpPost]
         public async Task<ListMessageContract<ContentContract>> GetAllByKey(GetAllByKeyRequestContract request)
         {
-            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents));
+            var getCategoryResult = await _categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
             if (!getCategoryResult)
                 return getCategoryResult.ToListContract<ContentContract>();
 
