@@ -1,23 +1,17 @@
+using EasyMicroservices.ContentsMicroservice.Contracts.Common;
+using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
 using EasyMicroservices.ContentsMicroservice.Database;
 using EasyMicroservices.ContentsMicroservice.Database.Contexts;
+using EasyMicroservices.ContentsMicroservice.Database.Entities;
+using EasyMicroservices.ContentsMicroservice.Interfaces;
+using EasyMicroservices.Cores.AspEntityFrameworkCoreApi.Interfaces;
+using EasyMicroservices.Cores.Relational.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using EasyMicroservices.ContentsMicroservice.Database.Entities;
-using EasyMicroservices.ContentsMicroservice.Contracts;
-using EasyMicroservices.ContentsMicroservice.Interfaces;
-using EasyMicroservices.ContentsMicroservice.Database;
-using EasyMicroservices.ContentsMicroservice.Interfaces;
-using EasyMicroservices.ContentsMicroservice;
-using EasyMicroservices.ContentsMicroservice.Contracts.Common;
-using EasyMicroservices.ContentsMicroservice.Contracts.Requests;
-using EasyMicroservices.ContentsMicroservice;
-
-
 
 namespace EasyMicroservices.ContentsMicroservice.WebApi
 {
@@ -51,14 +45,16 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             string webRootPath = @Directory.GetCurrentDirectory();
 
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>());
-            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
-            builder.Services.AddScoped((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
-            builder.Services.AddScoped<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
-
-            builder.Services.AddScoped<IDependencyManager>(service => new DependencyManager());
-            builder.Services.AddScoped(service => new WhiteLabelManager(service, service.GetService<IDependencyManager>()));
+            builder.Services.AddTransient((serviceProvider) => new DependencyManager().GetContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>());
+            builder.Services.AddTransient((serviceProvider) => new DependencyManager().GetContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>());
+            builder.Services.AddTransient((serviceProvider) => new DependencyManager().GetContractLogic<LanguageEntity, CreateLanguageRequestContract, UpdateLanguageRequestContract, LanguageContract>());
+            builder.Services.AddTransient<IDatabaseBuilder>(serviceProvider => new DatabaseBuilder());
+            builder.Services.AddScoped<IUnitOfWork>(service => new AppUnitOfWork(service));
+            builder.Services.AddTransient<IDependencyManager>(service => new DependencyManager());
+            builder.Services.AddTransient(service => new WhiteLabelManager(service, service.GetService<IDependencyManager>()));
             builder.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IDatabaseBuilder>()));
+            builder.Services.AddTransient<RelationalCoreContext>(serviceProvider => new ContentContext(serviceProvider.GetService<IDatabaseBuilder>()));
+
             //builder.Services.AddScoped<IFileManagerProvider>(serviceProvider => new FileManagerProvider());
             //builder.Services.AddScoped<IDirectoryManagerProvider, kc>();
 
@@ -82,7 +78,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             {
                 using var context = scope.ServiceProvider.GetService<ContentContext>();
                 await context.Database.EnsureCreatedAsync();
-                //await context.Database.MigrateAsync();
+                await context.Database.MigrateAsync();
                 await context.DisposeAsync();
                 var service = scope.ServiceProvider.GetService<WhiteLabelManager>();
                 await service.Initialize("Content", config.GetValue<string>("RootAddresses:WhiteLabel"), typeof(ContentContext));

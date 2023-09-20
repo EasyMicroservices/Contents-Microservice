@@ -60,6 +60,10 @@ namespace EasyMicroservices.ContentsMicroservice
 
             var uniqueIdentityManager = _dependencyManager.GetUniqueIdentityManager() as DefaultUniqueIdentityManager;
 
+
+            AppUnitOfWork.MicroserviceId = DependencyManager.MicroserviceId;
+            AppUnitOfWork.DefaultUniqueIdentity = DependencyManager.DefaultUniqueIdentity;
+
             var microserviceContextTableClient = new WhiteLables.GeneratedServices.MicroserviceContextTableClient(whiteLableRoute, HttpClient);
             var microserviceContextTables = await microserviceContextTableClient.GetAllAsync();
 
