@@ -1642,6 +1642,9 @@
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
           },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
+          },
           "result": {
             "title": "List<CategoryContract>",
             "type": "array",
@@ -1666,6 +1669,9 @@
           },
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
+          },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
           },
           "result": {
             "$ref": "#/components/schemas/CategoryContract"
@@ -1731,6 +1737,9 @@
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
           },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
+          },
           "result": {
             "title": "List<ContentContract>",
             "type": "array",
@@ -1755,6 +1764,9 @@
           },
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
+          },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
           },
           "result": {
             "$ref": "#/components/schemas/ContentContract"
@@ -1839,8 +1851,23 @@
             "nullable": true
           },
           "stackTrace": {
-            "type": "string",
-            "nullable": true
+            "title": "List<String>",
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "children": {
+            "title": "List<ErrorContract>",
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/ErrorContract"
+            }
+          },
+          "serviceDetails": {
+            "$ref": "#/components/schemas/ServiceDetailsContract"
           }
         }
       },
@@ -1857,7 +1884,7 @@
           "SessionAccessDenied",
           "AccessDenied",
           "InternalError",
-          "Dupplicate",
+          "Duplicate",
           "Empty",
           "NotFound",
           "ValidationsError",
@@ -2033,6 +2060,9 @@
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
           },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
+          },
           "result": {
             "type": "integer",
             "format": "int64"
@@ -2111,6 +2141,9 @@
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
           },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
+          },
           "result": {
             "title": "List<LanguageContract>",
             "type": "array",
@@ -2135,6 +2168,9 @@
           },
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
+          },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
           },
           "result": {
             "$ref": "#/components/schemas/LanguageContract"
@@ -2164,6 +2200,41 @@
           },
           "error": {
             "$ref": "#/components/schemas/ErrorContract"
+          },
+          "success": {
+            "$ref": "#/components/schemas/SuccessContract"
+          }
+        }
+      },
+      "ServiceDetailsContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "servieRouteAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "methodName": {
+            "type": "string",
+            "nullable": true
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "porjectName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SuccessContract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "endUserMessage": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
