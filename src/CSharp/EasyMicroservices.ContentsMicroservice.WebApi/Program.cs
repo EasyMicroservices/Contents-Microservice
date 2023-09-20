@@ -78,7 +78,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             {
                 using var context = scope.ServiceProvider.GetService<ContentContext>();
                 await context.Database.EnsureCreatedAsync();
-                await context.Database.MigrateAsync();
+                //await context.Database.MigrateAsync();
                 await context.DisposeAsync();
                 var service = scope.ServiceProvider.GetService<WhiteLabelManager>();
                 await service.Initialize("Content", config.GetValue<string>("RootAddresses:WhiteLabel"), typeof(ContentContext));

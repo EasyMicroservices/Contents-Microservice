@@ -77,7 +77,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
 
             var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key);
             if (getCategoryResult.IsSuccess)
-                return getCategoryResult.ToContract<CategoryContract>();
+                return (FailedReasonType.Duplicate, "Category already exists.");
 
             var languages = await languageLogic.GetAll();
             var notFoundLanguages = request.LanguageData.Select(x => x.Language).Except(languages.Result.Select(o => o.Name));
