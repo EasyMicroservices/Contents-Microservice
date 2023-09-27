@@ -36,6 +36,54 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="contract"></param>
+        /// <returns></returns>
+        public async Task ResolveContentAllLanguage(object contract)
+        {
+            if (contract == null)
+                return;
+            string uniqueRecordId = default;
+
+            var uidProperty = contract.GetType().GetProperty("UniqueRecordId", BindingFlags.Instance | BindingFlags.Public);
+            if (uidProperty != null)
+                uniqueRecordId = uidProperty.GetValue(contract) as string;
+            foreach (var property in contract.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                {
+                    var instance = Activator.CreateInstance(property.PropertyType);
+                    if (instance is IList list)
+                    {
+                        var genericType = property.PropertyType.GetGenericArguments()[0];
+                        var contents = await _contentClient.GetAllByKeyAsync(new GetAllByKeyRequestContract
+                        {
+                            Key = $"{uniqueRecordId}-{property.Name}"
+                        });
+                        if (contents.IsSuccess)
+                        {
+                            foreach (var item in contents.Result)
+                            {
+                                var itemInstance = Activator.CreateInstance(genericType);
+                                var languageProperty = itemInstance.GetType().GetProperty(nameof(LanguageDataContract.Language), BindingFlags.Public | BindingFlags.Instance);
+                                if (languageProperty == null)
+                                    throw new Exception($"Property {nameof(LanguageDataContract.Language)} not found in type {itemInstance.GetType()}");
+                                var dataProperty = itemInstance.GetType().GetProperty(nameof(LanguageDataContract.Data), BindingFlags.Public | BindingFlags.Instance);
+                                if (dataProperty == null)
+                                    throw new Exception($"Property {nameof(LanguageDataContract.Data)} not found in type {itemInstance.GetType()}");
+                                languageProperty.SetValue(itemInstance, item.Language.Name);
+                                dataProperty.SetValue(itemInstance, item.Data);
+                                list.Add(itemInstance);
+                            }
+                        }
+                    }
+                    property.SetValue(contract, instance);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="items"></param>
         /// <param name="language"></param>
         /// <returns></returns>

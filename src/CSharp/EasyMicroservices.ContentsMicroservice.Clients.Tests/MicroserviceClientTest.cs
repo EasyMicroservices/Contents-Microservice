@@ -45,6 +45,7 @@ Content-Length: 0
         [Fact]
         public async Task GetAllTestTest()
         {
+            var instance = Activator.CreateInstance(typeof(List<string>));
             //await OnInitialize();
             //var microserviceClient = new Contents.GeneratedServices.MicroserviceClient(_routeAddress, HttpClient);
             //var microservices = await microserviceClient.GetAllAsync();
