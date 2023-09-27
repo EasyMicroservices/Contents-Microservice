@@ -36,6 +36,24 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items"></param>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public async Task ResolveContentLanguage(IEnumerable items, string language)
+        {
+            if (items == null)
+                return;
+            List<Task> tasks = new List<Task>();
+            foreach (var item in items)
+            {
+                tasks.Add(ResolveContentLanguage(item, language, new HashSet<object>()));
+            }
+            await Task.WhenAll(tasks);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="contract"></param>
         /// <param name="language"></param>
         /// <returns></returns>
@@ -89,11 +107,85 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task<CategoryContractMessageContract> AddToContentLanguage(object item)
+        {
+            return SaveToContentLanguage(item, AddToContent);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task<CategoryContractMessageContract> UpdateToContentLanguage(object item)
+        {
+            return SaveToContentLanguage(item, UpdateToContent);
+        }
+
+        async Task<CategoryContractMessageContract> SaveToContentLanguage(object item, Func<(string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)[], Task<CategoryContractMessageContract>> saveData)
+        {
+            if (item.Equals(default))
+                return new CategoryContractMessageContract()
+                {
+                    IsSuccess = true,
+                };
+            string uniqueRecordId = default;
+
+            var uidProperty = item.GetType().GetProperty("UniqueRecordId", BindingFlags.Instance | BindingFlags.Public);
+            if (uidProperty != null)
+                uniqueRecordId = uidProperty.GetValue(item) as string;
+            var request = new List<(string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)>();
+            foreach (var property in item.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                {
+                    if (property.GetValue(item) is IEnumerable items)
+                    {
+                        string propertyName = property.Name;
+                        request.Add((uniqueRecordId, propertyName, Map(items)));
+                    }
+                }
+            }
+            var result = await saveData(request.ToArray());
+            if (!result.IsSuccess)
+                return result;
+            return new CategoryContractMessageContract()
+            {
+                IsSuccess = true,
+            };
+        }
+
+
+        IEnumerable<LanguageDataContract> Map(IEnumerable objects)
+        {
+            if (objects != null)
+            {
+                foreach (var item in objects)
+                {
+                    var languageProperty = item.GetType().GetProperty(nameof(LanguageDataContract.Language), BindingFlags.Public | BindingFlags.Instance);
+                    if (languageProperty == null)
+                        throw new Exception($"Property {nameof(LanguageDataContract.Language)} not found in type {item.GetType()}");
+                    var dataProperty = item.GetType().GetProperty(nameof(LanguageDataContract.Data), BindingFlags.Public | BindingFlags.Instance);
+                    if (dataProperty == null)
+                        throw new Exception($"Property {nameof(LanguageDataContract.Data)} not found in type {item.GetType()}");
+                    yield return new LanguageDataContract()
+                    {
+                        Language = languageProperty.GetValue(item) as string,
+                        Data = dataProperty.GetValue(item) as string,
+                    };
+                }
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="uniqueRecordId"></param>
         /// <param name="name"></param>
         /// <param name="languages"></param>
         /// <returns></returns>
-        public async Task<CategoryContractMessageContract> AddToContent(string uniqueRecordId, string name, IEnumerable<LanguageDataContract> languages)
+        async Task<CategoryContractMessageContract> AddToContent(string uniqueRecordId, string name, IEnumerable<LanguageDataContract> languages)
         {
             var addNames = await _contentClient.AddContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
@@ -108,7 +200,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public async Task<CategoryContractMessageContract> AddToContent(params (string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
+        async Task<CategoryContractMessageContract> AddToContent(params (string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
         {
             CategoryContractMessageContract result = default;
             foreach (var item in items)
@@ -127,7 +219,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <param name="name"></param>
         /// <param name="languages"></param>
         /// <returns></returns>
-        public async Task<CategoryContractMessageContract> UpdateToContent(string uniqueRecordId, string name, IEnumerable<LanguageDataContract> languages)
+        async Task<CategoryContractMessageContract> UpdateToContent(string uniqueRecordId, string name, IEnumerable<LanguageDataContract> languages)
         {
             var addNames = await _contentClient.AddContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
@@ -142,7 +234,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public async Task<CategoryContractMessageContract> UpdateToContent(params (string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
+        async Task<CategoryContractMessageContract> UpdateToContent(params (string UniqueRecordId, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
         {
             CategoryContractMessageContract result = default;
             foreach (var item in items)
