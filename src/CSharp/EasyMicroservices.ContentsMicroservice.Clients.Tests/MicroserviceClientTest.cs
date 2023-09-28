@@ -1,5 +1,7 @@
+﻿using Contents.GeneratedServices;
 using EasyMicroservices.Laboratory.Engine;
 using EasyMicroservices.Laboratory.Engine.Net.Http;
+using Newtonsoft.Json;
 
 namespace EasyMicroservices.ContentsMicroservice.Clients.Tests
 {
