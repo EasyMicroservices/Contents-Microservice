@@ -52,6 +52,36 @@ Content-Type: application/json; charset=utf-8
 Content-Length: 0
 
 {""result"":{""Data"": ""Hello My Content Language""},""isSuccess"":true,""error"":null}");
+
+                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1
+Host: localhost:{Port}
+Accept: text/plain*RequestSkipBody*
+
+{{""key"":""1-1-Title""}}"
+    ,
+    @"HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 0
+
+{
+	""result"": [
+		{
+			""Data"": ""Hello My Title Language"",
+			""Language"": {
+				""Name"": ""en-US""
+			}
+		},
+		{
+			""Data"": ""persian hi"",
+			""Language"": {
+				""Name"": ""fa-IR""
+			}
+		}
+	],
+	""isSuccess"": true,
+	""error"": null
+}");
+
             }
             finally
             {
@@ -102,6 +132,21 @@ Content-Length: 0
             Assert.NotEmpty(personContract.Post.Content);
             Assert.NotEmpty(personContract.Posts[0].Title);
             Assert.NotEmpty(personContract.Posts[0].Content);
+        }
+
+        [Fact]
+        public async Task ContentAllLanguagePersonTest()
+        {
+            await OnInitialize();
+
+            PersonLanguageContract personContract = new PersonLanguageContract();
+            personContract.UniqueIdentity = "1-1";
+
+            ContentLanguageHelper contentLanguageHelper = new ContentLanguageHelper(new Contents.GeneratedServices.ContentClient(_routeAddress, HttpClient));
+            await contentLanguageHelper.ResolveContentAllLanguage(personContract);
+
+            Assert.NotEmpty(personContract.Titles);
+            Assert.True(personContract.Titles.Count > 1);
         }
     }
 }
