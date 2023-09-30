@@ -72,7 +72,6 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         [HttpPost]
         public async Task<MessageContract<CategoryContract>> AddContentWithKey(AddContentWithKeyRequestContract request)
         {
-            GC.Collect();
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
@@ -121,7 +120,6 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         [HttpPost]
         public async Task<MessageContract> UpdateContentWithKey(AddContentWithKeyRequestContract request)
         {
-            GC.Collect();
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
