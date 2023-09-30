@@ -1,5 +1,6 @@
 ﻿using EasyMicroservices.ContentsMicroservice.Database.Entities;
 using EasyMicroservices.Cores.Relational.EntityFrameworkCore;
+using EasyMicroservices.Cores.Relational.EntityFrameworkCore.Intrerfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -7,23 +8,13 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
 {
     public class ContentContext : RelationalCoreContext
     {
-        IDatabaseBuilder _builder;
-        public ContentContext(IDatabaseBuilder builder)
+        public ContentContext(IEntityFrameworkCoreDatabaseBuilder builder) : base(builder)
         {
-            _builder = builder;
         }
 
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<ContentEntity> Contents { get; set; }
         public DbSet<LanguageEntity> Languages { get; set; }
-
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (_builder != null)
-                _builder.OnConfiguring(optionsBuilder);
-            base.OnConfiguring(optionsBuilder);
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

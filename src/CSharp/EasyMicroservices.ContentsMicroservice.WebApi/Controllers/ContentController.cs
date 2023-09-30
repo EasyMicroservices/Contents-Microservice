@@ -13,10 +13,11 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
     public class ContentController : SimpleQueryServiceController<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long>
     {
         readonly IUnitOfWork unitOfWork;
-        public ContentController(IUnitOfWork _unitOfWork) : base(null)
+        public ContentController(IUnitOfWork _unitOfWork) : base(_unitOfWork)
         {
             unitOfWork = _unitOfWork;
         }
+
         public override async Task<MessageContract<long>> Add(CreateContentRequestContract request, CancellationToken cancellationToken = default)
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
@@ -27,6 +28,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
                 return await base.Add(request, cancellationToken);
             return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
         }
+
         public override async Task<MessageContract<ContentContract>> Update(UpdateContentRequestContract request, CancellationToken cancellationToken = default)
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
