@@ -57,7 +57,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
                         var genericType = property.PropertyType.GetGenericArguments()[0];
                         var contents = await _contentClient.GetAllByKeyAsync(new GetAllByKeyRequestContract
                         {
-                            Key = $"{uniqueIdentity}-{GetPropertyName(property.Name)}"
+                            Key = $"{uniqueIdentity}-{GetPropertyNameToSingular(property.Name)}"
                         });
                         if (contents.IsSuccess)
                         {
@@ -191,7 +191,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
                 {
                     if (property.GetValue(item) is IEnumerable items)
                     {
-                        string propertyName = property.Name;
+                        string propertyName = GetPropertyNameToSingular(property.Name);
                         request.Add((uniqueIdentity, propertyName, Map(items)));
                     }
                 }
@@ -277,7 +277,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             return addNames;
         }
 
-        string GetPropertyName(string name)
+        string GetPropertyNameToSingular(string name)
         {
             string addContrent = "";
             int dropLength = 0;
