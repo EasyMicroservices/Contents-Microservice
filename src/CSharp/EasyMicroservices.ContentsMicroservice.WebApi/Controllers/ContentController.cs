@@ -8,7 +8,7 @@ using EasyMicroservices.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
+namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
 {
     public class ContentController : SimpleQueryServiceController<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract, long>
     {
@@ -26,7 +26,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Add(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
+            return (FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
         }
 
         public override async Task<MessageContract<ContentContract>> Update(UpdateContentRequestContract request, CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
             var checkCategoryId = await categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Update(request, cancellationToken);
-            return (EasyMicroservices.ServiceContracts.FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
+            return (FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
 
         }
 
@@ -72,13 +72,14 @@ namespace EasyMicroservices.QuestionsMicroservice.WebApi.Controllers
         [HttpPost]
         public async Task<MessageContract<CategoryContract>> AddContentWithKey(AddContentWithKeyRequestContract request)
         {
+            Console.WriteLine($"try add {request.Key}!");
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
 
             var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key);
             if (getCategoryResult.IsSuccess)
-                return (FailedReasonType.Duplicate, "Category already exists.");
+                return (FailedReasonType.Duplicate, $"Category {request.Key} already exists.");
 
             var languages = await languageLogic.GetAll();
             var notFoundLanguages = request.LanguageData.Select(x => x.Language).Except(languages.Result.Select(o => o.Name));
