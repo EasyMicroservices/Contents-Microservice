@@ -23,7 +23,10 @@ namespace EasyMicroservices.ContentsMicroservice.Database.Contexts
             modelBuilder.Entity<CategoryEntity>(model =>
             {
                 model.HasKey(x => x.Id);
+                model.HasIndex(x => x.Key).IsUnique();
+                model.Property(x => x.Key).UseCollation("SQL_Latin1_General_CP1_CS_AS");
             });
+
             modelBuilder.Entity<ContentEntity>(model =>
             {
                 model.HasKey(x => x.Id);
