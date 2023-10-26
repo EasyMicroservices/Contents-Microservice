@@ -1,13 +1,16 @@
 ﻿using Contents.GeneratedServices;
 using EasyMicroservices.ContentsMicroservice.Clients.Attributes;
+using EasyMicroservices.ServiceContracts;
+using Erfuantum.Aggregator.Contracts.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using MessageContract = Contents.GeneratedServices.MessageContract;
 
-namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
+namespace Erfuantum.Aggregator.Helpers
 {
     /// <summary>
     /// 
@@ -167,9 +170,9 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task<CategoryContractMessageContract> UpdateToContentLanguage(object item)
+        public Task<MessageContract> UpdateToContentLanguage(object item)
         {
-            return SaveToContentLanguage(item, UpdateToContent);
+            return SaveToContentLanguageUpdate(item, UpdateToContent);
         }
 
         async Task<CategoryContractMessageContract> SaveToContentLanguage(object item, Func<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[], Task<CategoryContractMessageContract>> saveData)
@@ -200,6 +203,40 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             if (!result.IsSuccess)
                 return result;
             return new CategoryContractMessageContract()
+            {
+                IsSuccess = true,
+            };
+        }
+
+
+        async Task<MessageContract> SaveToContentLanguageUpdate(object item, Func<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[], Task<MessageContract>> saveData)
+        {
+            if (item.Equals(default))
+                return new MessageContract()
+                {
+                    IsSuccess = true,
+                };
+            string uniqueIdentity = default;
+
+            var uidProperty = item.GetType().GetProperty("UniqueIdentity", BindingFlags.Instance | BindingFlags.Public);
+            if (uidProperty != null)
+                uniqueIdentity = uidProperty.GetValue(item) as string;
+            var request = new List<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)>();
+            foreach (var property in item.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                {
+                    if (property.GetValue(item) is IEnumerable items)
+                    {
+                        string propertyName = GetPropertyNameToSingular(property.Name);
+                        request.Add((uniqueIdentity, propertyName, Map(items)));
+                    }
+                }
+            }
+            var result = await saveData(request.ToArray());
+            if (!result.IsSuccess)
+                return result;
+            return new MessageContract()
             {
                 IsSuccess = true,
             };
@@ -238,7 +275,11 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             var addNames = await _contentClient.AddContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
                 Key = $"{uniqueIdentity}-{name}",
-                LanguageData = languages.ToList(),
+                LanguageData = languages.Select(o => new LanguageDataContract
+                {
+                    Data = o.Data,
+                    Language = o.Language
+                }).ToList(),
             });
             return addNames;
         }
@@ -267,30 +308,40 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <param name="name"></param>
         /// <param name="languages"></param>
         /// <returns></returns>
-        async Task<CategoryContractMessageContract> UpdateToContent(string uniqueIdentity, string name, IEnumerable<LanguageDataContract> languages)
+        async Task<MessageContract> UpdateToContent(string uniqueIdentity, string name, IEnumerable<LanguageDataContract> languages)
         {
-            var addNames = await _contentClient.AddContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
+            var addNames = await _contentClient.UpdateContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
                 Key = $"{uniqueIdentity}-{name}",
-                LanguageData = languages.ToList(),
+                LanguageData = languages.Select(o => new LanguageDataContract
+                {
+                    Data = o.Data,
+                    Language = o.Language
+                }).ToList(),
             });
+
             return addNames;
         }
 
         string GetPropertyNameToSingular(string name)
         {
-            string addContrent = "";
+            string addContent = "";
             int dropLength = 0;
             if (name.EndsWith("ses"))
                 dropLength = 2;
-            else if (name.EndsWith("s"))
+            else if (name.EndsWith("s") && !name.EndsWith("Tags"))
                 dropLength = 1;
+            else if (name.EndsWith("Tags"))
+            {
+                dropLength = 4;
+                addContent = "Tags";
+            }
             else if (name.EndsWith("Children"))
             {
                 dropLength = 8;
-                addContrent = "Child";
+                addContent = "Child";
             }
-            return string.Concat(name.Substring(0, name.Length - dropLength), addContrent);
+            return string.Concat(name.Substring(0, name.Length - dropLength), addContent);
         }
 
         /// <summary>
@@ -298,9 +349,9 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        async Task<CategoryContractMessageContract> UpdateToContent(params (string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
+        async Task<MessageContract> UpdateToContent(params (string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[] items)
         {
-            CategoryContractMessageContract result = default;
+            MessageContract result = default;
             foreach (var item in items)
             {
                 result = await UpdateToContent(item.UniqueIdentity, item.Name, item.Languages);
