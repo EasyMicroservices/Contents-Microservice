@@ -1,7 +1,5 @@
 ﻿using Contents.GeneratedServices;
 using EasyMicroservices.ContentsMicroservice.Clients.Attributes;
-using EasyMicroservices.ServiceContracts;
-using Erfuantum.Aggregator.Contracts.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using MessageContract = Contents.GeneratedServices.MessageContract;
 
-namespace Erfuantum.Aggregator.Helpers
+namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
 {
     /// <summary>
     /// 
