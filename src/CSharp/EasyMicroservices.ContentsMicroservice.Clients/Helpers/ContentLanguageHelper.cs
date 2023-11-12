@@ -58,7 +58,8 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
                         var genericType = property.PropertyType.GetGenericArguments()[0];
                         var contents = await _contentClient.GetAllByKeyAsync(new GetAllByKeyRequestContract
                         {
-                            Key = $"{uniqueIdentity}-{GetPropertyNameToSingular(property.Name)}"
+                            Key = $"{GetPropertyName(property)}",
+                            UniqueIdentity = uniqueIdentity
                         });
                         if (contents.IsSuccess)
                         {
@@ -123,7 +124,8 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
                 {
                     var contentResult = await _contentClient.GetByLanguageAsync(new GetByLanguageRequestContract()
                     {
-                        Key = GetUniqueIdentity(contract) + "-" + property.Name,
+                        Key = property.Name,
+                        UniqueIdentity = GetUniqueIdentity(contract),
                         Language = language
                     });
                     if (contentResult.IsSuccess)
@@ -188,11 +190,10 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             var request = new List<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)>();
             foreach (var property in item.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
             {
-                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                if (TryGetPropertyName(property, out string propertyName))
                 {
                     if (property.GetValue(item) is IEnumerable items)
                     {
-                        string propertyName = GetPropertyNameToSingular(property.Name);
                         request.Add((uniqueIdentity, propertyName, Map(items)));
                     }
                 }
@@ -222,11 +223,10 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             var request = new List<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)>();
             foreach (var property in item.GetType().GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
             {
-                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                if (TryGetPropertyName(property, out string propertyName))
                 {
                     if (property.GetValue(item) is IEnumerable items)
                     {
-                        string propertyName = GetPropertyNameToSingular(property.Name);
                         request.Add((uniqueIdentity, propertyName, Map(items)));
                     }
                 }
@@ -240,6 +240,21 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             };
         }
 
+        bool TryGetPropertyName(PropertyInfo property, out string propertyName)
+        {
+            var contentLanguageAttribute = property.GetCustomAttribute<ContentLanguageAttribute>();
+            propertyName = GetPropertyName(property);
+            return contentLanguageAttribute != null;
+        }
+
+        string GetPropertyName(PropertyInfo property)
+        {
+            var contentLanguageAttribute = property.GetCustomAttribute<ContentLanguageAttribute>();
+            if (contentLanguageAttribute != null)
+                return contentLanguageAttribute.PropertyName ?? property.Name;
+            else
+                return property.Name;
+        }
 
         IEnumerable<LanguageDataContract> Map(IEnumerable objects)
         {
@@ -272,7 +287,8 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         {
             var addNames = await _contentClient.AddContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
-                Key = $"{uniqueIdentity}-{name}",
+                Key = $"{name}",
+                UniqueIdentity = uniqueIdentity,
                 LanguageData = languages.Select(o => new LanguageDataContract
                 {
                     Data = o.Data,
@@ -310,7 +326,8 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         {
             var addNames = await _contentClient.UpdateContentWithKeyAsync(new Contents.GeneratedServices.AddContentWithKeyRequestContract
             {
-                Key = $"{uniqueIdentity}-{name}",
+                Key = $"{name}",
+                UniqueIdentity = uniqueIdentity,
                 LanguageData = languages.Select(o => new LanguageDataContract
                 {
                     Data = o.Data,
@@ -319,27 +336,6 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             });
 
             return addNames;
-        }
-
-        string GetPropertyNameToSingular(string name)
-        {
-            string addContent = "";
-            int dropLength = 0;
-            if (name.EndsWith("ses"))
-                dropLength = 2;
-            else if (name.EndsWith("s") && !name.EndsWith("Tags"))
-                dropLength = 1;
-            else if (name.EndsWith("Tags"))
-            {
-                dropLength = 4;
-                addContent = "Tags";
-            }
-            else if (name.EndsWith("Children"))
-            {
-                dropLength = 8;
-                addContent = "Child";
-            }
-            return string.Concat(name.Substring(0, name.Length - dropLength), addContent);
         }
 
         /// <summary>
