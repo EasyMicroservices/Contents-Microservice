@@ -15,7 +15,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Tests.Contracts.Common
     }
     public class PersonLanguageContract
     {
-        [ContentLanguage]
+        [ContentLanguage(nameof(PersonContract.Title))]
         public List<ServiceLanguageContract> Titles { get; set; }
         public PostContract Post { get; set; }
         public List<PostContract> Posts { get; set; }
