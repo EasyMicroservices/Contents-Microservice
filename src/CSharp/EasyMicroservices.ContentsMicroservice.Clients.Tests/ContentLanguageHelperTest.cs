@@ -29,9 +29,7 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Tests
                 ResourceManager resourceManager = new ResourceManager();
                 HttpHandler httpHandler = new HttpHandler(resourceManager);
                 await httpHandler.Start(Port);
-                resourceManager.Append(@$"POST *RequestSkipBody* HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST *RequestSkipBody* HTTP/1.1*RequestSkipBody*
 
 {{""language"":""fa-IR"",""key"":""1-1-Title""}}"
     ,
@@ -41,9 +39,7 @@ Content-Length: 0
 
 {""result"":{""Data"": ""Hello My Title Language""},""isSuccess"":true,""error"":null}");
 
-                resourceManager.Append(@$"POST *RequestSkipBody* HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST *RequestSkipBody* HTTP/1.1*RequestSkipBody*
 
 {{""language"":""fa-IR"",""key"":""1-1-Content""}}"
    ,
@@ -53,9 +49,7 @@ Content-Length: 0
 
 {""result"":{""Data"": ""Hello My Content Language""},""isSuccess"":true,""error"":null}");
 
-                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1*RequestSkipBody*
 
 {{""key"":""1-1-Title""}}"
     ,
@@ -82,9 +76,7 @@ Content-Length: 0
 	""error"": null
 }");
 
-                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1*RequestSkipBody*
 
 {{""language"":""fa-IR"",""key"":""Title"",""uniqueIdentity"":""1-1""}}"
     ,
@@ -103,9 +95,7 @@ Content-Length: 0
                 	""isSuccess"": true,
                 	""error"": null
                 }");
-                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1*RequestSkipBody*
 
 {{""language"":""fa-IR"",""key"":""Content"",""uniqueIdentity"":""1-1""}}"
 ,
@@ -125,11 +115,9 @@ Content-Length: 0
                 	""error"": null
                 }");
 
-                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1
-Host: localhost:{Port}
-Accept: text/plain*RequestSkipBody*
+                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1*RequestSkipBody*
 
-{{""key"":""Titles"",""uniqueIdentity"":""1-1""}}"
+{{""key"":""Title"",""uniqueIdentity"":""1-1""}}"
 ,
 @"HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
