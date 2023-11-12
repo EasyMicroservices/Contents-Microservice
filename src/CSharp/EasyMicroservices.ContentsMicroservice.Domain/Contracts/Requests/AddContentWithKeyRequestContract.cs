@@ -1,15 +1,13 @@
-﻿using System;
+﻿using EasyMicroservices.ContentsMicroservice.Contracts.Common;
+using EasyMicroservices.Cores.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasyMicroservices.ContentsMicroservice.Contracts.Common;
 
 namespace EasyMicroservices.ContentsMicroservice.Contracts.Requests
 {
-    public class AddContentWithKeyRequestContract
+    public class AddContentWithKeyRequestContract : IUniqueIdentitySchema
     {
         public string Key { get; set; }
+        public string UniqueIdentity { get; set; }
         public List<LanguageDataContract> LanguageData { get; set; }
     }
 }

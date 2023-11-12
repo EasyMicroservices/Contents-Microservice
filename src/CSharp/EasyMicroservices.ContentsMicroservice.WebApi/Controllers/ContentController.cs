@@ -45,10 +45,14 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         public async Task<MessageContract<ContentContract>> GetByLanguage(GetByLanguageRequestContract request)
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
-            var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
+            var getCategoryResult = await categorylogic.GetByUniqueIdentity(request, Cores.DataTypes.GetUniqueIdentityType.All,
+                query => query.Where(x => x.Key == request.Key)
+                .Include(x => x.Contents)
+                .ThenInclude(x => x.Language));
             if (!getCategoryResult)
                 return getCategoryResult.ToContract<ContentContract>();
-            var contentResult = getCategoryResult.Result.Contents.FirstOrDefault(x => x.Language.Name.Equals(request.Language, StringComparison.OrdinalIgnoreCase));
+            var contentResult = getCategoryResult.Result.Contents
+                .FirstOrDefault(x => x.Language.Name.Equals(request.Language, StringComparison.OrdinalIgnoreCase));
             if (contentResult == null)
                 contentResult = getCategoryResult.Result.Contents.FirstOrDefault();
             if (contentResult == null)
@@ -62,7 +66,13 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         public async Task<ListMessageContract<ContentContract>> GetAllByKey(GetAllByKeyRequestContract request)
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
-            var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
+            var getCategoryResult = await categorylogic
+                .GetByUniqueIdentity(request,
+                    Cores.DataTypes.GetUniqueIdentityType.All,
+                    query => query
+                    .Where(x => x.Key == request.Key)
+                    .Include(x => x.Contents)
+                    .ThenInclude(x => x.Language));
             if (!getCategoryResult)
                 return getCategoryResult.ToListContract<ContentContract>();
 
@@ -77,7 +87,9 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
 
-            var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key);
+            var getCategoryResult = await categorylogic.GetByUniqueIdentity(request,
+                Cores.DataTypes.GetUniqueIdentityType.All
+                    , query => query.Where(x => x.Key == request.Key));
             if (getCategoryResult.IsSuccess)
                 return (FailedReasonType.Duplicate, $"Category {request.Key} already exists.");
 
@@ -89,6 +101,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
                 var addCategoryResult = await categorylogic.Add(new CreateCategoryRequestContract
                 {
                     Key = request.Key,
+                    UniqueIdentity = request.UniqueIdentity
                 });
 
                 if (!addCategoryResult.IsSuccess)
@@ -124,7 +137,13 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
-            var getCategoryResult = await categorylogic.GetBy(x => x.Key == request.Key, query => query.Include(x => x.Contents).ThenInclude(x => x.Language));
+            var getCategoryResult = await categorylogic.GetByUniqueIdentity(request,
+                 Cores.DataTypes.GetUniqueIdentityType.All,
+                 query => query
+                 .Where(x => x.Key == request.Key)
+                 .Include(x => x.Contents)
+                 .ThenInclude(x => x.Language));
+
             if (!getCategoryResult)
                 return getCategoryResult;
             var contents = getCategoryResult.Result.Contents;
@@ -138,7 +157,6 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
                         CategoryId = content.CategoryId,
                         LanguageId = content.LanguageId,
                         UniqueIdentity = content.UniqueIdentity,
-
                         Data = request.LanguageData.FirstOrDefault(o => o.Language == content.Language.Name).Data
                     });
 
@@ -161,7 +179,6 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
                         CategoryId = getCategoryResult.Result.Id,
                         LanguageId = language.Result.Id,
                         UniqueIdentity = language.Result.UniqueIdentity,
-
                         Data = languageData.Data
                     });
 

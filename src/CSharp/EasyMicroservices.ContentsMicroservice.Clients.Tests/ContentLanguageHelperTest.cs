@@ -82,6 +82,77 @@ Content-Length: 0
 	""error"": null
 }");
 
+                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1
+Host: localhost:{Port}
+Accept: text/plain*RequestSkipBody*
+
+{{""language"":""fa-IR"",""key"":""Title"",""uniqueIdentity"":""1-1""}}"
+    ,
+    @"HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 0
+
+                {
+                	""result"":
+                		{
+                			""Data"": ""Hello My Title Language"",
+                			""Language"": {
+                				""Name"": ""en-US""
+                			}
+                		},
+                	""isSuccess"": true,
+                	""error"": null
+                }");
+                resourceManager.Append(@$"POST /api/Content/GetByLanguage HTTP/1.1
+Host: localhost:{Port}
+Accept: text/plain*RequestSkipBody*
+
+{{""language"":""fa-IR"",""key"":""Content"",""uniqueIdentity"":""1-1""}}"
+,
+@"HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 0
+
+                {
+                	""result"":
+                		{
+                			""Data"": ""Hello My Content Language"",
+                			""Language"": {
+                				""Name"": ""en-US""
+                			}
+                		},
+                	""isSuccess"": true,
+                	""error"": null
+                }");
+
+                resourceManager.Append(@$"POST /api/Content/GetAllByKey HTTP/1.1
+Host: localhost:{Port}
+Accept: text/plain*RequestSkipBody*
+
+{{""key"":""Titles"",""uniqueIdentity"":""1-1""}}"
+,
+@"HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Content-Length: 0
+
+                {
+	                ""result"": [
+		                {
+			                ""Data"": ""Hello My Title Language"",
+			                ""Language"": {
+				                ""Name"": ""en-US""
+			                }
+		                },
+		                {
+			                ""Data"": ""persian hi"",
+			                ""Language"": {
+				                ""Name"": ""fa-IR""
+			                }
+		                }
+	                ],
+                	""isSuccess"": true,
+                	""error"": null
+                }");
             }
             finally
             {
@@ -96,7 +167,8 @@ Content-Length: 0
             var microserviceClient = new Contents.GeneratedServices.ContentClient(_routeAddress, HttpClient);
             var microservices = await microserviceClient.GetByLanguageAsync(new Contents.GeneratedServices.GetByLanguageRequestContract()
             {
-                Key = "1-1-Title",
+                Key = "Title",
+                UniqueIdentity = "1-1",
                 Language = "fa-IR"
             });
             Assert.True(microservices.IsSuccess);
