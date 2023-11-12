@@ -9,7 +9,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
         public static async Task Main(string[] args)
         {
             var app = CreateBuilder(args);
-            var build = await app.Build<ContentContext>();
+            var build = await app.Build<ContentContext>(true);
             build.MapControllers();
             build.Run();
         }
