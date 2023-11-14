@@ -5818,6 +5818,7 @@ namespace Contents.GeneratedServices
     public partial class IsKeyExistRequestContract : System.ComponentModel.INotifyPropertyChanged
     {
         private string _key;
+        private string _uniqueIdentity;
 
         [Newtonsoft.Json.JsonProperty("key", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string Key
@@ -5829,6 +5830,21 @@ namespace Contents.GeneratedServices
                 if (_key != value)
                 {
                     _key = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        [Newtonsoft.Json.JsonProperty("uniqueIdentity", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UniqueIdentity
+        {
+            get { return _uniqueIdentity; }
+
+            set
+            {
+                if (_uniqueIdentity != value)
+                {
+                    _uniqueIdentity = value;
                     RaisePropertyChanged();
                 }
             }
