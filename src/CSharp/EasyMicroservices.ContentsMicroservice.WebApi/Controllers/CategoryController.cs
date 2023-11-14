@@ -21,8 +21,12 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         [HttpPost]
         public async Task<MessageContract<CategoryContract>> HasKey(IsKeyExistRequestContract request)
         {
-            var isKeyExists = await _unitOfWork.GetLongContractLogic<CategoryEntity, CategoryContract>().GetBy(o => o.Key == request.Key);
-            return isKeyExists;
+
+            return await _unitOfWork.GetLongContractLogic<CategoryEntity, CategoryContract>().GetByUniqueIdentity(request,
+                Cores.DataTypes.GetUniqueIdentityType.All,
+                query => query.Where(x => x.Key == request.Key)
+            );
+
         }
     }
 }
