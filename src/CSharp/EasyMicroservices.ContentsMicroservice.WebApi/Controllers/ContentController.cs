@@ -117,7 +117,8 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
                     {
                         CategoryId = addCategoryResult.Result,
                         LanguageId = languageId.Value,
-                        Data = item.Data
+                        Data = item.Data,
+                        UniqueIdentity = request.UniqueIdentity
                     });
                 }
 
