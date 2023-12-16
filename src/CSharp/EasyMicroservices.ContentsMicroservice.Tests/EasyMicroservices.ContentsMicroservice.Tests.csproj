@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyMicroservices.ContentsMicroservice.Clients" Version="0.0.0.16" />
-    <PackageReference Include="EasyMicroservices.Tests" Version="0.0.0.9" />
+    <PackageReference Include="EasyMicroservices.ContentsMicroservice.Clients" Version="*" />
+    <PackageReference Include="EasyMicroservices.Tests" Version="*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.6.1" />
     <PackageReference Include="xunit.runner.console" Version="2.6.1">
@@ -32,7 +32,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>    
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing">
-      <Version>7.0.13</Version>
+      <Version>7.0.14</Version>
     </PackageReference>
   </ItemGroup>
 

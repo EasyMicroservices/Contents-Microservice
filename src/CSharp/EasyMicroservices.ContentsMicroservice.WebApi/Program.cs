@@ -9,7 +9,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
         public static async Task Main(string[] args)
         {
             var app = CreateBuilder(args);
-            var build = await app.Build<ContentContext>(true);
+            var build = await app.BuildWithUseCors<ContentContext>(null, true);
             build.MapControllers();
             build.Run();
         }
@@ -21,6 +21,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
             app.Services.AddTransient((serviceProvider) => new UnitOfWork(serviceProvider));
             app.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IEntityFrameworkCoreDatabaseBuilder>()));
             app.Services.AddTransient<IEntityFrameworkCoreDatabaseBuilder, DatabaseBuilder>();
+            StartUpExtensions.AddAuthentication("RootAddresses:Authentication");
             StartUpExtensions.AddWhiteLabel("Content", "RootAddresses:WhiteLabel");
             return app;
         }
