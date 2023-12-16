@@ -20,8 +20,8 @@ namespace EasyMicroservices.ContentsMicroservice
 
         public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseInMemoryDatabase("ContentDatabase");
-            optionsBuilder.UseSqlServer(_configuration.GetConnectionString("local"));
+            optionsBuilder.UseInMemoryDatabase("ContentDatabase");
+            //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("local"));
         }
     }
 }

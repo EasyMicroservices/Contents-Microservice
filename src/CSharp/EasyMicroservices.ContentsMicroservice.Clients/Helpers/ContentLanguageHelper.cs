@@ -168,11 +168,42 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public async Task<List<CategoryContractMessageContract>> AddToContentLanguage(IEnumerable items)
+        {
+            List<Task<CategoryContractMessageContract>> tasks = new List<Task<CategoryContractMessageContract>>();
+            foreach (var item in items)
+            {
+                tasks.Add(AddToContentLanguage(item));
+            }
+            await Task.WhenAll(tasks);
+            return tasks.Select(x => x.Result).ToList();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
         public Task<MessageContract> UpdateToContentLanguage(object item)
         {
             return SaveToContentLanguageUpdate(item, UpdateToContent);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public async Task UpdateToContentLanguage(IEnumerable items)
+        {
+            List<Task> tasks = new List<Task>();
+            foreach (var item in items)
+            {
+                tasks.Add(UpdateToContentLanguage(item));
+            }
+            await Task.WhenAll(tasks);
         }
 
         async Task<CategoryContractMessageContract> SaveToContentLanguage(object item, Func<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[], Task<CategoryContractMessageContract>> saveData)
