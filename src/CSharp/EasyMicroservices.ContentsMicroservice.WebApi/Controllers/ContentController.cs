@@ -22,8 +22,8 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
-            var checkLanguageId = await languageLogic.GetById(new GetIdRequestContract<long>() { Id = request.LanguageId });
-            var checkCategoryId = await categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
+            var checkLanguageId = await languageLogic.GetById(new GetByIdRequestContract<long>() { Id = request.LanguageId });
+            var checkCategoryId = await categorylogic.GetById(new GetByIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Add(request, cancellationToken);
             return (FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
@@ -33,8 +33,8 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
         {
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
-            var checkLanguageId = await languageLogic.GetById(new GetIdRequestContract<long>() { Id = request.LanguageId });
-            var checkCategoryId = await categorylogic.GetById(new GetIdRequestContract<long>() { Id = request.CategoryId });
+            var checkLanguageId = await languageLogic.GetById(new GetByIdRequestContract<long>() { Id = request.LanguageId });
+            var checkCategoryId = await categorylogic.GetById(new GetByIdRequestContract<long>() { Id = request.CategoryId });
             if (checkLanguageId.IsSuccess && checkCategoryId.IsSuccess)
                 return await base.Update(request, cancellationToken);
             return (FailedReasonType.Incorrect, "Language or Categoryid is incorrect");
@@ -122,7 +122,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
                     });
                 }
 
-                var addedCategoryResult = await categorylogic.GetById(new GetIdRequestContract<long>
+                var addedCategoryResult = await categorylogic.GetById(new GetByIdRequestContract<long>
                 {
                     Id = addCategoryResult.Result
                 });
