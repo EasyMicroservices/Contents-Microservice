@@ -118,34 +118,44 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
                 return;
             var type = contract.GetType();
             mappedItems.Add(contract);
-            foreach (var property in type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            if (IsClass(type) && typeof(IEnumerable).IsAssignableFrom(type))
             {
-                if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
+                foreach (var item in (IEnumerable)contract)
                 {
-                    var contentResult = await _contentClient.GetByLanguageAsync(new GetByLanguageRequestContract()
-                    {
-                        Key = property.Name,
-                        UniqueIdentity = GetUniqueIdentity(contract),
-                        Language = language
-                    });
-                    if (contentResult.IsSuccess)
-                        property.SetValue(contract, contentResult.Result.Data);
+                    await ResolveContentLanguage(item, language, mappedItems);
                 }
-                else if (IsClass(property.PropertyType) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+            }
+            else
+            {
+                foreach (var property in type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
                 {
-                    var items = property.GetValue(contract);
-                    if (items == null)
-                        continue;
-                    foreach (var item in (IEnumerable)items)
+                    if (property.GetCustomAttribute<ContentLanguageAttribute>() != null)
                     {
-                        await ResolveContentLanguage(item, language, mappedItems);
+                        var contentResult = await _contentClient.GetByLanguageAsync(new GetByLanguageRequestContract()
+                        {
+                            Key = property.Name,
+                            UniqueIdentity = GetUniqueIdentity(contract),
+                            Language = language
+                        });
+                        if (contentResult.IsSuccess)
+                            property.SetValue(contract, contentResult.Result.Data);
                     }
-                }
-                else if (IsClass(property.PropertyType))
-                {
-                    var value = property.GetValue(contract);
-                    if (value != null)
-                        await ResolveContentLanguage(value, language, mappedItems);
+                    else if (IsClass(property.PropertyType) && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                    {
+                        var items = property.GetValue(contract);
+                        if (items == null)
+                            continue;
+                        foreach (var item in (IEnumerable)items)
+                        {
+                            await ResolveContentLanguage(item, language, mappedItems);
+                        }
+                    }
+                    else if (IsClass(property.PropertyType))
+                    {
+                        var value = property.GetValue(contract);
+                        if (value != null)
+                            await ResolveContentLanguage(value, language, mappedItems);
+                    }
                 }
             }
         }
