@@ -1,27 +1,21 @@
-﻿using EasyMicroservices.ContentsMicroservice.Database;
-using EasyMicroservices.Cores.Relational.EntityFrameworkCore.Intrerfaces;
+﻿using EasyMicroservices.Cores.Relational.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EasyMicroservices.ContentsMicroservice
 {
-    public class DatabaseBuilder : IEntityFrameworkCoreDatabaseBuilder
+    public class DatabaseBuilder : EntityFrameworkCoreDatabaseBuilder
     {
-        IConfiguration _configuration;
-        public DatabaseBuilder(IConfiguration configuration)
+        public DatabaseBuilder(IConfiguration configuration) : base(configuration)
         {
-            _configuration = configuration;
         }
 
-        public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public override void OnConfiguring(DbContextOptionsBuilder optionsBuilder, string name)
         {
-            optionsBuilder.UseInMemoryDatabase("ContentDatabase");
-            //optionsBuilder.UseSqlServer(_configuration.GetConnectionString("local"));
+            if (name == "SqlServer")
+                optionsBuilder.UseSqlServer(Configuration.GetConnectionString("local"));
+            else
+                optionsBuilder.UseInMemoryDatabase("Contents");
         }
     }
 }
