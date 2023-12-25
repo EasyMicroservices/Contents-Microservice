@@ -180,15 +180,14 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        public async Task<List<CategoryContractMessageContract>> AddToContentLanguage(IEnumerable items)
+        public Task<List<Task<CategoryContractMessageContract>>> AddToContentLanguage(IEnumerable items)
         {
             List<Task<CategoryContractMessageContract>> tasks = new List<Task<CategoryContractMessageContract>>();
             foreach (var item in items)
             {
                 tasks.Add(AddToContentLanguage(item));
             }
-            await Task.WhenAll(tasks);
-            return tasks.Select(x => x.Result).ToList();
+            return Task.FromResult(tasks);
         }
 
         /// <summary>
