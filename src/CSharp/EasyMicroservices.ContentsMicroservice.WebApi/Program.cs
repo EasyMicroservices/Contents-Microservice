@@ -17,7 +17,8 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi
         static WebApplicationBuilder CreateBuilder(string[] args)
         {
             var app = StartUpExtensions.Create<ContentContext>(args);
-            app.Services.Builder<ContentContext>("Content");
+            app.Services.Builder<ContentContext>("Content")
+                .UseDefaultSwaggerOptions();
             app.Services.AddTransient((serviceProvider) => new UnitOfWork(serviceProvider));
             app.Services.AddTransient(serviceProvider => new ContentContext(serviceProvider.GetService<IEntityFrameworkCoreDatabaseBuilder>()));
             app.Services.AddTransient<IEntityFrameworkCoreDatabaseBuilder, DatabaseBuilder>();
