@@ -12,7 +12,7 @@
   
   <ItemGroup>
 	  <PackageReference Include="EasyMicroservices.Configuration" Version="*" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.14" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.15" />
   </ItemGroup>
   
   <ItemGroup>

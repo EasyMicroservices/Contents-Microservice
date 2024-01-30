@@ -240,13 +240,25 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             }
             var result = await saveData(request.ToArray());
             if (!result.IsSuccess)
+            {
+                LogContract(result.Error);
                 return result;
+            }
+
             return new CategoryContractMessageContract()
             {
                 IsSuccess = true,
             };
         }
 
+        void LogContract(ErrorContract contract)
+        {
+            Console.WriteLine($"Content Error Message: {contract.Message}");
+            Console.WriteLine($"Content Error EndUserMessage: {contract.EndUserMessage}");
+            Console.WriteLine($"Content Error Details: {contract.Details}");
+            Console.WriteLine($"Content Error ProjectName: {contract.ServiceDetails?.ProjectName}");
+            Console.WriteLine($"Content Error MethodName: {contract.ServiceDetails?.MethodName}");
+        }
 
         async Task<MessageContract> SaveToContentLanguageUpdate(object item, Func<(string UniqueIdentity, string Name, IEnumerable<LanguageDataContract> Languages)[], Task<MessageContract>> saveData)
         {
@@ -273,7 +285,10 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             }
             var result = await saveData(request.ToArray());
             if (!result.IsSuccess)
+            {
+                LogContract(result.Error);
                 return result;
+            }
             return new MessageContract()
             {
                 IsSuccess = true,
@@ -350,7 +365,10 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             {
                 result = await AddToContent(item.UniqueIdentity, item.Name, item.Languages);
                 if (!result.IsSuccess)
+                {
+                    LogContract(result.Error);
                     return result;
+                }
             }
             return result;
         }
@@ -390,7 +408,10 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
             {
                 result = await UpdateToContent(item.UniqueIdentity, item.Name, item.Languages);
                 if (!result.IsSuccess)
+                {
+                    LogContract(result.Error);
                     return result;
+                }
             }
             return result;
         }
