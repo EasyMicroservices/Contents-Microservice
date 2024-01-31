@@ -4,6 +4,7 @@ using EasyMicroservices.ContentsMicroservice.Database.Entities;
 using EasyMicroservices.Cores.AspCoreApi;
 using EasyMicroservices.Cores.AspEntityFrameworkCoreApi.Interfaces;
 using EasyMicroservices.Cores.Contracts.Requests;
+using EasyMicroservices.Cores.DataTypes;
 using EasyMicroservices.ServiceContracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -85,7 +86,7 @@ namespace EasyMicroservices.ContentsMicroservice.WebApi.Controllers
             Console.WriteLine($"try add {request.Key}!");
             using var categorylogic = unitOfWork.GetLongContractLogic<CategoryEntity, CreateCategoryRequestContract, UpdateCategoryRequestContract, CategoryContract>();
             using var contentlogic = unitOfWork.GetLongContractLogic<ContentEntity, CreateContentRequestContract, UpdateContentRequestContract, ContentContract>();
-            using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>();
+            using var languageLogic = unitOfWork.GetLongContractLogic<LanguageEntity, LanguageContract>(UniqueIdentityStrategy.Full);
 
             var getCategoryResult = await categorylogic.GetByUniqueIdentity(request,
                 Cores.DataTypes.GetUniqueIdentityType.All
