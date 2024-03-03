@@ -37,6 +37,23 @@ namespace EasyMicroservices.ContentsMicroservice.Clients.Helpers
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        public async Task ResolveContentAllLanguage(IEnumerable items)
+        {
+            if (items == null)
+                return;
+            List<Task> tasks = new List<Task>();
+            foreach (var item in items)
+            {
+                tasks.Add(ResolveContentAllLanguage(item));
+            }
+            await Task.WhenAll(tasks);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="contract"></param>
         /// <returns></returns>
         public async Task ResolveContentAllLanguage(object contract)
